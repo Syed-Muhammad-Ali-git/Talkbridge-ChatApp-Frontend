@@ -29,7 +29,7 @@ const ChatWindow = ({ activeChat, messages, messageInput, setMessageInput, onSen
 
   if (!activeChat) {
     return (
-      <div className="hidden md:flex flex-1 flex flex-col items-center justify-center bg-bg-main p-8 text-center animate-in fade-in duration-500">
+      <div className="hidden lg:flex flex-1 flex flex-col items-center justify-center bg-bg-main p-8 text-center animate-in fade-in duration-500">
         <div className="w-24 h-24 bg-white/50 backdrop-blur-sm rounded-3xl flex items-center justify-center shadow-xl mb-8">
           <Paperclip size={48} className="text-primary/30 -rotate-45" />
         </div>
@@ -47,14 +47,14 @@ const ChatWindow = ({ activeChat, messages, messageInput, setMessageInput, onSen
   }
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-white relative overflow-hidden animate-in fade-in slide-in-from-right-4 duration-300 z-50 md:z-auto">
+    <div className="flex-1 flex flex-col h-full bg-white relative overflow-hidden animate-in fade-in slide-in-from-right-4 duration-300 z-50 lg:z-auto">
       {/* Header */}
-      <div className="h-[76px] px-4 md:px-6 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between sticky top-0 z-30">
-        <div className="flex items-center space-x-2 md:space-x-4">
+      <div className="h-[76px] px-4 lg:px-6 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between sticky top-0 z-30">
+        <div className="flex items-center space-x-2 lg:space-x-4">
           {onBack && (
             <button 
               onClick={onBack}
-              className="p-2 md:hidden text-text-secondary hover:bg-gray-100 rounded-xl transition-all"
+              className="p-2 lg:hidden text-text-secondary hover:bg-gray-100 rounded-xl transition-all"
             >
               <ArrowLeft size={24} />
             </button>

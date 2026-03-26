@@ -26,7 +26,7 @@ const ConversationList = ({
   setSearchQuery 
 }: ConversationListProps) => {
   return (
-    <div className="w-[350px] bg-white border-r border-gray-100 flex flex-col h-full shrink-0 overflow-hidden">
+    <div className="w-full lg:w-[350px] bg-white border-r border-gray-100 flex flex-col h-full shrink-0 overflow-hidden">
       <div className="p-6 pb-2">
         <h1 className="text-2xl font-bold text-text-primary mb-6">Talkbridge</h1>
         

@@ -12,17 +12,21 @@ interface Contact {
 interface ContactsViewProps {
   contacts: Contact[];
   onSelectContact: (id: number) => void;
+  onAddContact?: () => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
 }
 
-const ContactsView = ({ contacts, onSelectContact, searchQuery, setSearchQuery }: ContactsViewProps) => {
+const ContactsView = ({ contacts, onSelectContact, onAddContact, searchQuery, setSearchQuery }: ContactsViewProps) => {
   return (
-    <div className="w-full md:w-[350px] bg-white border-r border-gray-100 flex flex-col h-full shrink-0 overflow-hidden">
+    <div className="w-full lg:w-[350px] bg-white border-r border-gray-100 flex flex-col h-full shrink-0 overflow-hidden">
       <div className="p-6 pb-2">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-text-primary">Contacts</h1>
-          <button className="p-2 bg-primary/10 text-primary rounded-xl hover:bg-primary/20 transition-all">
+          <button 
+            onClick={onAddContact}
+            className="p-2 bg-primary/10 text-primary rounded-xl hover:bg-primary/20 transition-all"
+          >
             <UserPlus size={20} />
           </button>
         </div>

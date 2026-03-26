@@ -30,6 +30,7 @@ const App = () => {
   const [activeChat, setActiveChat] = useState<number | null>(null);
   const [messageInput, setMessageInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [darkMode, setDarkMode] = useState(false);
 
   // Simulation of initial loading
   useEffect(() => {
@@ -37,7 +38,7 @@ const App = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const [contacts] = useState<Contact[]>([
+  const [contacts, setContacts] = useState<Contact[]>([
     {
       id: 1,
       name: "Ali Mazhar",
@@ -130,10 +131,24 @@ const App = () => {
     setMessageInput("");
   };
 
+  const handleAddContact = () => {
+    const name = prompt("Enter contact name:");
+    if (!name) return;
+    const newContact: Contact = {
+      id: Date.now(),
+      name,
+      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`,
+      status: "offline",
+      lastMessage: "No messages yet",
+      time: "Just now"
+    };
+    setContacts(prev => [...prev, newContact]);
+  };
+
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-white">
-        <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+      <div className={`flex flex-col items-center justify-center h-screen ${darkMode ? "bg-gray-900 text-white" : "bg-white"}`}>
+        <div className={`w-16 h-16 border-4 ${darkMode ? "border-primary/20 border-t-primary" : "border-primary/20 border-t-primary"} rounded-full animate-spin`}></div>
         <h1 className="mt-6 text-primary font-bold text-2xl tracking-tight">Talkbridge</h1>
         <p className="mt-2 text-text-secondary text-sm animate-pulse">Launching your secure messenger...</p>
       </div>
@@ -141,12 +156,17 @@ const App = () => {
   }
 
   return (
-    <div className="flex h-screen bg-bg-main overflow-hidden font-sans selection:bg-primary/10 relative">
+    <div className={`flex h-screen overflow-hidden font-sans selection:bg-primary/10 relative ${darkMode ? "dark bg-gray-900" : "bg-bg-main"}`}>
       <div className={`flex w-full h-full ${activeChat ? 'active-chat' : ''}`}>
-        <div className={`flex shrink-0 h-full ${activeChat ? 'hidden md:flex' : 'flex w-full md:w-auto'}`}>
-          <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+        {/* Navigation & List Section */}
+        <div className={`flex shrink-0 h-full ${activeChat ? 'hidden lg:flex' : 'flex w-full lg:w-auto'}`}>
+          <Sidebar 
+            activeTab={activeTab} 
+            setActiveTab={setActiveTab} 
+            hideOnMobile={!!activeChat} 
+          />
           
-          <div className="flex-1 md:w-[350px]">
+          <div className="flex-1 lg:w-[350px] pb-20 lg:pb-0 flex flex-col h-full bg-white">
             {activeTab === 'chats' && (
               <ConversationList 
                 contacts={filteredContacts} 
@@ -164,17 +184,19 @@ const App = () => {
                   setActiveChat(id);
                   setActiveTab('chats');
                 }}
+                onAddContact={handleAddContact}
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
               />
             )}
 
             {activeTab === 'profile' && <ProfileView />}
-            {activeTab === 'settings' && <SettingsView />}
+            {activeTab === 'settings' && <SettingsView darkMode={darkMode} setDarkMode={setDarkMode} />}
           </div>
         </div>
 
-        <div className={`flex-1 h-full ${!activeChat ? 'hidden md:flex' : 'flex'}`}>
+        {/* Chat window section */}
+        <div className={`flex-1 h-full ${!activeChat ? 'hidden lg:flex' : 'flex'}`}>
           <ChatWindow 
             activeChat={currentChat} 
             messages={currentMessages}

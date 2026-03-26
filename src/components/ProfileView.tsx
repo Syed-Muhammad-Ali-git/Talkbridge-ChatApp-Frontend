@@ -10,7 +10,7 @@ const ProfileView = () => {
   };
 
   return (
-    <div className="w-full md:w-[350px] bg-white border-r border-gray-100 flex flex-col h-full shrink-0 overflow-hidden">
+    <div className="w-full lg:w-[350px] bg-white border-r border-gray-100 flex flex-col h-full shrink-0 overflow-hidden">
       <div className="p-6">
         <h1 className="text-2xl font-bold text-text-primary mb-8">Profile</h1>
         
