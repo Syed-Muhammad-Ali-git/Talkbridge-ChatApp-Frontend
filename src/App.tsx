@@ -2,6 +2,9 @@ import { useState, useEffect, useMemo } from "react";
 import Sidebar from "./components/Sidebar";
 import ConversationList from "./components/ConversationList";
 import ChatWindow from "./components/ChatWindow";
+import ContactsView from "./components/ContactsView";
+import ProfileView from "./components/ProfileView";
+import SettingsView from "./components/SettingsView";
 
 interface Message {
   id: number;
@@ -138,44 +141,50 @@ const App = () => {
   }
 
   return (
-    <div className="flex h-screen bg-bg-main overflow-hidden font-sans selection:bg-primary/10">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      
-      {activeTab === 'chats' && (
-        <ConversationList 
-          contacts={filteredContacts} 
-          activeChat={activeChat} 
-          setActiveChat={setActiveChat}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery} 
-        />
-      )}
+    <div className="flex h-screen bg-bg-main overflow-hidden font-sans selection:bg-primary/10 relative">
+      <div className={`flex w-full h-full ${activeChat ? 'active-chat' : ''}`}>
+        <div className={`flex shrink-0 h-full ${activeChat ? 'hidden md:flex' : 'flex w-full md:w-auto'}`}>
+          <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+          
+          <div className="flex-1 md:w-[350px]">
+            {activeTab === 'chats' && (
+              <ConversationList 
+                contacts={filteredContacts} 
+                activeChat={activeChat} 
+                setActiveChat={setActiveChat}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery} 
+              />
+            )}
 
-      {activeTab === 'contacts' && (
-        <div className="w-[350px] bg-white border-r border-gray-100 flex flex-col h-full shrink-0 items-center justify-center p-8 text-center">
-           <p className="text-text-secondary text-sm">Contacts list will appear here.</p>
+            {activeTab === 'contacts' && (
+              <ContactsView 
+                contacts={contacts} 
+                onSelectContact={(id) => {
+                  setActiveChat(id);
+                  setActiveTab('chats');
+                }}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+              />
+            )}
+
+            {activeTab === 'profile' && <ProfileView />}
+            {activeTab === 'settings' && <SettingsView />}
+          </div>
         </div>
-      )}
 
-      {activeTab === 'profile' && (
-        <div className="w-[350px] bg-white border-r border-gray-100 flex flex-col h-full shrink-0 items-center justify-center p-8 text-center text-sm">
-           <p className="text-text-secondary">Your profile settings.</p>
+        <div className={`flex-1 h-full ${!activeChat ? 'hidden md:flex' : 'flex'}`}>
+          <ChatWindow 
+            activeChat={currentChat} 
+            messages={currentMessages}
+            messageInput={messageInput}
+            setMessageInput={setMessageInput}
+            onSendMessage={handleSendMessage}
+            onBack={() => setActiveChat(null)}
+          />
         </div>
-      )}
-
-      {activeTab === 'settings' && (
-        <div className="w-[350px] bg-white border-r border-gray-100 flex flex-col h-full shrink-0 items-center justify-center p-8 text-center text-sm">
-           <p className="text-text-secondary">Application settings.</p>
-        </div>
-      )}
-
-      <ChatWindow 
-        activeChat={currentChat} 
-        messages={currentMessages}
-        messageInput={messageInput}
-        setMessageInput={setMessageInput}
-        onSendMessage={handleSendMessage}
-      />
+      </div>
     </div>
   );
 };
